@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rates_array">
+        <item>USD</item>
+        <item>BYN</item>
+        <item>EUR</item>
+        <item>RUB</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>MXN</item>
+        <item>PLN</item>
+    </string-array>
+</resources>
