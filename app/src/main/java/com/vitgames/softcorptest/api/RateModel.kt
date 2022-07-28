@@ -1,58 +1,69 @@
 package com.vitgames.softcorptest.api
 
 import com.google.gson.annotations.SerializedName
+import com.vitgames.softcorptest.R
 
 class RateModel {
 
     @SerializedName("base_code")
-    private val base : String? = null
+    private val base: String? = null
 
     @SerializedName("conversion_rates")
-    private val rates : Rates? = null
+    private val rates: Rates? = null
 
     fun getRates(): Rates? = rates
 
     class Rates {
 
         @SerializedName("USD")
-        private val usdRate : String? = null
+        private val usdRate: String? = null
 
-        @SerializedName("AUD")
-        private val audRate : String? = null
-
-        @SerializedName("CAD")
-        private val cadRate : String? = null
+        @SerializedName("UAH")
+        private val uahRate: String? = null
 
         @SerializedName("RUB")
-        private val rubRate : String? = null
-
-        @SerializedName("MXN")
-        private val mxnRate : String? = null
+        private val rubRate: String? = null
 
         @SerializedName("PLN")
-        private val plnRate : String? = null
+        private val plnRate: String? = null
 
         @SerializedName("BYN")
-        private val bynRate : String? = null
+        private val bynRate: String? = null
 
         @SerializedName("EUR")
-        private val eurRate : String? = null
+        private val eurRate: String? = null
+
+        @SerializedName("GBP")
+        private val gbpRate: String? = null
+
+        @SerializedName("CNY")
+        private val cnyRate: String? = null
+
+        @SerializedName("KZT")
+        private val kztRate: String? = null
+
+        @SerializedName("CZK")
+        private val czkRate: String? = null
 
         fun getRateData(): MutableList<RateData> {
             val data = mutableListOf<RateData>()
-            data.add(RateData("USD",usdRate ?: ""))
-            data.add(RateData("AUD",audRate ?: ""))
-            data.add(RateData("CAD",cadRate ?: ""))
-            data.add(RateData("RUB",rubRate ?: ""))
-            data.add(RateData("PLN",plnRate ?: ""))
-            data.add(RateData("BYN",bynRate ?: ""))
-            data.add(RateData("EUR",eurRate ?: ""))
-          return data
+            data.add(RateData(R.drawable.ic_united_states, "USD", usdRate ?: ""))
+            data.add(RateData(R.drawable.ic_european_union, "EUR", eurRate ?: ""))
+            data.add(RateData(R.drawable.ic_belarus, "BYN", bynRate ?: ""))
+            data.add(RateData(R.drawable.ic_russia, "RUB", rubRate ?: ""))
+            data.add(RateData(R.drawable.ic_ukraine, "UAH", uahRate ?: ""))
+            data.add(RateData(R.drawable.ic_poland, "PLN", plnRate ?: ""))
+            data.add(RateData(R.drawable.ic_united_kingdom, "GBP", gbpRate ?: ""))
+            data.add(RateData(R.drawable.ic_china, "CNY", cnyRate ?: ""))
+            data.add(RateData(R.drawable.ic_kazakhstan, "KZT", kztRate ?: ""))
+            data.add(RateData(R.drawable.ic_czech_republic, "CZK", czkRate ?: ""))
+            return data
         }
     }
 }
 
 data class RateData(
-     val name: String,
-     val value: String
+    val icon: Int,
+    val name: String,
+    val value: String
 )

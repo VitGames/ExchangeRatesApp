@@ -32,6 +32,7 @@ class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>() {
 class PopularViewHolder(private val binding: RecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: RateData) {
+        binding.icon.setImageResource(item.icon)
         binding.rateName.text = item.name
         binding.rateValue.text = item.value
     }

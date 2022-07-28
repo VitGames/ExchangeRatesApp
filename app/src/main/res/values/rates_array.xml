@@ -2,12 +2,14 @@
 <resources>
     <string-array name="rates_array">
         <item>USD</item>
-        <item>BYN</item>
         <item>EUR</item>
+        <item>BYN</item>
         <item>RUB</item>
-        <item>AUD</item>
-        <item>CAD</item>
-        <item>MXN</item>
+        <item>UAH</item>
         <item>PLN</item>
+        <item>GBP</item>
+        <item>CNY</item>
+        <item>KZT</item>
+        <item>CZK</item>
     </string-array>
 </resources>
