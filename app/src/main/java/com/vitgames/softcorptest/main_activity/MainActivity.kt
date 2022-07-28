@@ -6,39 +6,47 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.textview.MaterialTextView
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
-import com.vitgames.softcorptest.RateDataInteractor
 import com.vitgames.softcorptest.databinding.ActivityMainBinding
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var interactor: RateDataInteractor
+    lateinit var modelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initScreenWindow()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         (applicationContext as MainApplication).appComponent.inject(this)
-        initSpinner()
+        viewModel = ViewModelProviders.of(this, modelFactory)[MainViewModel::class.java]
+
+        initRateSpinner()
+        initAmountSpinner()
         initBottomMenu()
-        binding.spinner.onItemSelectedListener = this
+        handleDefaultRequest()
 
         binding.sortButton.setOnClickListener {
             // TODO(Баг - нажатие на боттом меню не вызывает другие фрагменты)
             findNavController(R.id.fragment).navigate(R.id.action_global_sortedFragment)
         }
+    }
+
+    private fun handleDefaultRequest() {
+        viewModel.sendRequest()
     }
 
     private fun initScreenWindow() {
@@ -49,20 +57,53 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         )
     }
 
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        val base = (p1 as MaterialTextView).text.toString()
-        interactor.setBaseRate(base)
-    }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-    private fun initSpinner() {
+    private fun initRateSpinner() {
         ArrayAdapter.createFromResource(
             this, R.array.rates_array, android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinner.adapter = adapter
+            binding.rateSpinner.adapter = adapter
         }
+
+        binding.rateSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val newRate = (selectedItemView as TextView).text.toString()
+                    viewModel.setRateName(newRate)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+    }
+
+    private fun initAmountSpinner() {
+        ArrayAdapter.createFromResource(
+            this, R.array.amount_array, android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.amountSpinner.adapter = adapter
+        }
+
+        binding.amountSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val newAmount = (selectedItemView as TextView).text.toString()
+                    viewModel.setAmount(newAmount)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
     }
 
     private fun initBottomMenu() {

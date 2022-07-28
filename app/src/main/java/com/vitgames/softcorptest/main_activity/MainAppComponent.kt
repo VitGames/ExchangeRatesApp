@@ -47,5 +47,10 @@ abstract class ViewModelModule {
     internal abstract fun bindEditPlaceSortedViewModel(viewModel: SortedViewModel): ViewModel
 
     @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindEditPlaceMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }

@@ -22,9 +22,9 @@ class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    fun setData(newData: MutableList<RateData>) {
+    fun setData(newData: List<RateData>) {
         data.clear()
-        data.addAll(newData)
+        data.addAll(newData as MutableList<RateData>)
         notifyDataSetChanged()
     }
 }

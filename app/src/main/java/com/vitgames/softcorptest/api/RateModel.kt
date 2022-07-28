@@ -5,8 +5,7 @@ import com.vitgames.softcorptest.R
 
 class RateModel {
 
-    @SerializedName("base_code")
-    private val base: String? = null
+    // TODO(апи возвращяет отличные от Нац Банка значения)
 
     @SerializedName("conversion_rates")
     private val rates: Rates? = null
@@ -65,5 +64,5 @@ class RateModel {
 data class RateData(
     val icon: Int,
     val name: String,
-    val value: String
+    var value: String
 )
