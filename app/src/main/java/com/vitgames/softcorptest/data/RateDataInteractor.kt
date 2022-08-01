@@ -11,7 +11,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 interface RateDataInteractor {
-    fun sendRequest(amount: Int, rateName: String)
+    fun sendRequest(amount: Double, rateName: String)
     fun getRateData(): LiveData<List<RateData>>
 }
 
@@ -20,13 +20,13 @@ class RateDataInteractorImpl @Inject constructor() : RateDataInteractor {
     private val api = ApiManager().getClient()?.create(ApiManager.ApiInterface::class.java)
     private var currentData = MutableLiveData<List<RateData>>()
 
-    override fun sendRequest(amount: Int, rateName: String) {
+    override fun getRateData(): LiveData<List<RateData>> = currentData
+
+    override fun sendRequest(amount: Double, rateName: String) {
         handleResponse(amount, rateName)
     }
 
-    override fun getRateData(): LiveData<List<RateData>> = currentData
-
-    private fun handleResponse(amount: Int, rateName: String) {
+    private fun handleResponse(amount: Double, rateName: String) {
         val callToday: Call<RateModel>? = api?.getRates(rateName)
         callToday?.enqueue(object : Callback<RateModel?> {
 
@@ -45,7 +45,7 @@ class RateDataInteractorImpl @Inject constructor() : RateDataInteractor {
 
     private fun getFormattedRateList(
         data: MutableList<RateData>?,
-        amount: Int,
+        amount: Double,
         rateName: String
     ): List<RateData> {
         return if (data == null) {
@@ -54,7 +54,7 @@ class RateDataInteractorImpl @Inject constructor() : RateDataInteractor {
             // filter out list to remove duplicate rate
             val result = data.filter { it.name != rateName }
 
-            if (amount != 1) {
+            if (amount != 1.0) {
                 result.map {
                     val newRateValue: Double = it.value.toDouble() * amount
                     it.value = newRateValue.toString()

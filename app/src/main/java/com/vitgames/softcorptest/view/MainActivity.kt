@@ -1,13 +1,16 @@
 package com.vitgames.softcorptest.view
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -36,13 +39,19 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, modelFactory)[MainViewModel::class.java]
 
         initRateSpinner()
-        initAmountSpinner()
         initBottomMenu()
+        initAmountEditInput()
         handleDefaultRequest()
+    }
 
-        binding.sortButton.setOnClickListener {
-            // TODO(Баг - нажатие на боттом меню не вызывает другие фрагменты)
-            findNavController(R.id.fragment).navigate(R.id.action_global_sortedFragment)
+    private fun initAmountEditInput() {
+        val amountInput = binding.amountInput
+        amountInput.doAfterTextChanged {
+            viewModel.setInputAfterTextChangedListener(amountInput.text.toString())
+        }
+
+        viewModel.userInputData.observe(this) { newInput ->
+           binding.amountInput.setText(newInput)
         }
     }
 
@@ -57,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
     }
-
 
     private fun initRateSpinner() {
         ArrayAdapter.createFromResource(
@@ -77,30 +85,6 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     val newRate = (selectedItemView as TextView).text.toString()
                     viewModel.setRateName(newRate)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-    }
-
-    private fun initAmountSpinner() {
-        ArrayAdapter.createFromResource(
-            this, R.array.amount_array, android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.amountSpinner.adapter = adapter
-        }
-
-        binding.amountSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parentView: AdapterView<*>?,
-                    selectedItemView: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val newAmount = (selectedItemView as TextView).text.toString()
-                    viewModel.setAmount(newAmount)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

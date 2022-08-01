@@ -45,7 +45,7 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recycler)
 
-        viewModel.currentData.observe(this.viewLifecycleOwner) { newData ->
+        viewModel.currentData.observe(viewLifecycleOwner) { newData ->
             adapter.setData(newData)
         }
     }
