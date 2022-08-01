@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.vitgames.softcorptest.data.api.RateData
 import com.vitgames.softcorptest.databinding.RecyclerItemBinding
+import java.util.*
 
-class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>() {
+
+class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>(), ItemTouchHelperAdapter {
 
     private var data = mutableListOf<RateData>()
 
@@ -28,13 +31,55 @@ class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>() {
         data.addAll(newData as MutableList<RateData>)
         notifyDataSetChanged()
     }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(data, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(data, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
 }
 
-class PopularViewHolder(private val binding: RecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class PopularViewHolder(private val binding: RecyclerItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: RateData) {
         binding.icon.setImageResource(item.icon)
         binding.rateName.text = item.name
         binding.rateValue.text = item.value
     }
+}
+
+interface ItemTouchHelperAdapter {
+    fun onItemMove(fromPosition: Int, toPosition: Int)
+}
+
+class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter) :
+    ItemTouchHelper.Callback() {
+
+    override fun isLongPressDragEnabled(): Boolean = true
+
+    override fun isItemViewSwipeEnabled(): Boolean = false
+
+    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: ViewHolder): Int {
+        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+        val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+        return makeMovementFlags(dragFlags, swipeFlags)
+    }
+
+    override fun onMove(
+        recyclerView: RecyclerView, viewHolder: ViewHolder,
+        target: ViewHolder
+    ): Boolean {
+        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        return true
+    }
+
+    override fun onSwiped(viewHolder: ViewHolder, direction: Int) {}
 }

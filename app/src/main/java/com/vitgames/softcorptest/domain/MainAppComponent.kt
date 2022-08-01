@@ -2,15 +2,15 @@ package com.vitgames.softcorptest.main_activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.vitgames.softcorptest.RateDataInteractor
-import com.vitgames.softcorptest.RateDataInteractorImpl
+import com.vitgames.softcorptest.data.RateDataInteractor
+import com.vitgames.softcorptest.data.RateDataInteractorImpl
 import com.vitgames.softcorptest.domain.MainViewModel
 import com.vitgames.softcorptest.view.PopularFragment
 import com.vitgames.softcorptest.domain.PopularViewModel
 import com.vitgames.softcorptest.view.SortedFragment
 import com.vitgames.softcorptest.domain.SortedViewModel
-import com.vitgames.softcorptest.utils.ViewModelFactory
-import com.vitgames.softcorptest.utils.ViewModelKey
+import com.vitgames.softcorptest.ViewModelFactory
+import com.vitgames.softcorptest.ViewModelKey
 import com.vitgames.softcorptest.view.MainActivity
 import dagger.Binds
 import dagger.Component

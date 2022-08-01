@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest
+package com.vitgames.softcorptest.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

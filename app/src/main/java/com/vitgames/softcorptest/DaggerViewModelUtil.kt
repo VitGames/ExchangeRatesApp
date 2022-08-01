@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.utils
+package com.vitgames.softcorptest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
