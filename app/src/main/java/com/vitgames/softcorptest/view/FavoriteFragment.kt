@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.favorite
+package com.vitgames.softcorptest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

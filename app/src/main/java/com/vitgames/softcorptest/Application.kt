@@ -5,7 +5,6 @@ import com.vitgames.softcorptest.main_activity.DaggerMainAppComponent
 import com.vitgames.softcorptest.main_activity.MainAppComponent
 import com.vitgames.softcorptest.main_activity.MainAppModule
 
-
 class MainApplication : Application() {
 
     lateinit var appComponent: MainAppComponent
@@ -16,6 +15,5 @@ class MainApplication : Application() {
             .builder()
             .mainAppModule(MainAppModule())
             .build()
-
     }
 }

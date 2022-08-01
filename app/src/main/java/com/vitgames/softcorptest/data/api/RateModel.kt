@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.api
+package com.vitgames.softcorptest.data.api
 
 import com.google.gson.annotations.SerializedName
 import com.vitgames.softcorptest.R

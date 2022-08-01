@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.sort
+package com.vitgames.softcorptest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.FragmentSortedBinding
-import com.vitgames.softcorptest.popular.PopularViewModel
+import com.vitgames.softcorptest.domain.SortedViewModel
 import javax.inject.Inject
 
 class SortedFragment : Fragment(R.layout.fragment_sorted) {

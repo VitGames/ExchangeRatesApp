@@ -1,9 +1,10 @@
-package com.vitgames.softcorptest.popular
+package com.vitgames.softcorptest.domain
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.vitgames.softcorptest.api.RateData
+import com.vitgames.softcorptest.data.api.RateData
 import com.vitgames.softcorptest.databinding.RecyclerItemBinding
 
 class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>() {

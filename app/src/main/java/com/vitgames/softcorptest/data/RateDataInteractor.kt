@@ -2,9 +2,9 @@ package com.vitgames.softcorptest
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.vitgames.softcorptest.api.ApiManager
-import com.vitgames.softcorptest.api.RateData
-import com.vitgames.softcorptest.api.RateModel
+import com.vitgames.softcorptest.data.api.ApiManager
+import com.vitgames.softcorptest.data.api.RateData
+import com.vitgames.softcorptest.data.api.RateModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

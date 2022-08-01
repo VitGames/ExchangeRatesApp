@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.sort
+package com.vitgames.softcorptest.domain
 
 import androidx.lifecycle.ViewModel
 import com.vitgames.softcorptest.RateDataInteractor

@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.helpers
+package com.vitgames.softcorptest
 
 class Constants {
 

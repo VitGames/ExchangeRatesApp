@@ -1,6 +1,6 @@
-package com.vitgames.softcorptest.api
+package com.vitgames.softcorptest.data.api
 
-import com.vitgames.softcorptest.helpers.Constants.Companion.API_KEY
+import com.vitgames.softcorptest.Constants.Companion.API_KEY
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

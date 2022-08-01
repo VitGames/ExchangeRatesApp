@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.popular
+package com.vitgames.softcorptest.domain
 
 import androidx.lifecycle.ViewModel
 import com.vitgames.softcorptest.RateDataInteractor

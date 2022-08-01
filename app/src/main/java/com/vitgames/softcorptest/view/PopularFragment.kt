@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.popular
+package com.vitgames.softcorptest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.FragmentPopularBinding
+import com.vitgames.softcorptest.domain.PopularAdapter
+import com.vitgames.softcorptest.domain.PopularViewModel
 import javax.inject.Inject
 
 class PopularFragment : Fragment(R.layout.fragment_popular) {

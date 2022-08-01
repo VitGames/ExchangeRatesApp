@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.main_activity
+package com.vitgames.softcorptest.view
 
 import android.os.Bundle
 import android.view.View
@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.ActivityMainBinding
+import com.vitgames.softcorptest.domain.MainViewModel
 import javax.inject.Inject
 
 

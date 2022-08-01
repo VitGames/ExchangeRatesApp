@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:orientation="vertical"
         android:theme="@style/Theme.SoftCorpTest">
-        <activity android:name=".main_activity.MainActivity">
+        <activity android:name=".view.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
