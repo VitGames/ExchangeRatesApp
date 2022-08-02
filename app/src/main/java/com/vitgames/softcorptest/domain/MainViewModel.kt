@@ -1,19 +1,24 @@
 package com.vitgames.softcorptest.domain
 
 import android.util.Log
-import android.widget.EditText
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.vitgames.softcorptest.addToComposite
 import com.vitgames.softcorptest.data.RateDataInteractor
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import rx.subscriptions.Subscriptions
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val interactor: RateDataInteractor) : ViewModel() {
 
     val userInputData = MutableLiveData<String>()
+
+    private val initViewSubscription = Subscriptions.from()
+    private val backgroundScheduler = Schedulers.io()
+    private val mainThreadScheduler = AndroidSchedulers.mainThread()
 
     private var currentAmount: Double = 1.0
     private var currentRate: String = "USD"
@@ -39,6 +44,8 @@ class MainViewModel @Inject constructor(private val interactor: RateDataInteract
         Observable.just(value)
             .doOnSubscribe { filterUserInput(value) }
             .delay(2, TimeUnit.SECONDS)
+            .subscribeOn(backgroundScheduler)
+            .observeOn(mainThreadScheduler)
             .subscribe(
                 { setAmount(it.toString()) },
                 {
@@ -47,7 +54,7 @@ class MainViewModel @Inject constructor(private val interactor: RateDataInteract
                         "setInputAfterTextChangedListener error" + it.localizedMessage
                     )
                 }
-            )
+            ).addToComposite(initViewSubscription)
     }
 
     fun sendRequest() {
@@ -59,5 +66,10 @@ class MainViewModel @Inject constructor(private val interactor: RateDataInteract
         if (firstChar == ".") {
             userInputData.postValue(amountInput.substring(1))
         }
+    }
+
+    override fun onCleared() {
+        initViewSubscription.clear()
+        super.onCleared()
     }
 }
