@@ -13,16 +13,21 @@ import javax.inject.Inject
 interface RateDataInteractor {
     fun sendRequest(amount: Double, rateName: String)
     fun getRateData(): LiveData<List<RateData>>
+    fun getProgressData(): LiveData<Boolean>
 }
 
 class RateDataInteractorImpl @Inject constructor() : RateDataInteractor {
 
     private val api = ApiManager().getClient()?.create(ApiManager.ApiInterface::class.java)
     private var currentData = MutableLiveData<List<RateData>>()
+    private var progressData =  MutableLiveData<Boolean>()
 
     override fun getRateData(): LiveData<List<RateData>> = currentData
 
+    override fun getProgressData(): LiveData<Boolean> = progressData
+
     override fun sendRequest(amount: Double, rateName: String) {
+        progressData.postValue(true)
         handleResponse(amount, rateName)
     }
 
@@ -34,9 +39,11 @@ class RateDataInteractorImpl @Inject constructor() : RateDataInteractor {
                 val responseData = response.body()?.getRates()?.getRateData()
                 val formattedData = getFormattedRateList(responseData, amount, rateName)
                 currentData.postValue(formattedData)
+                progressData.postValue(false)
             }
 
             override fun onFailure(call: Call<RateModel?>, t: Throwable) {
+                progressData.postValue(false)
                 // TODO(захэндлить ошибку запроса)
                 t.localizedMessage
             }

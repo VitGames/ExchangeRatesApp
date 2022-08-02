@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,6 +14,7 @@
         android:layout_height="50dp"
         android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="20dp"
+        android:maxLength="11"
         android:textSize="25sp"
         android:text="1"
         android:inputType="numberDecimal"
@@ -43,6 +46,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:indicatorColor="#07C1FA"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment"
+        tools:visibility="visible"/>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation"
+        tools:layout="@layout/fragment_popular"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
@@ -51,18 +80,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_menu"/>
-
-    <fragment
-        android:id="@+id/fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation"
-        tools:layout="@layout/fragment_popular"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

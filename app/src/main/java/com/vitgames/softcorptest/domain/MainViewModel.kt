@@ -12,22 +12,39 @@ import rx.subscriptions.Subscriptions
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val interactor: RateDataInteractor) : ViewModel() {
+class MainViewModel @Inject constructor(private val interactor: RateDataInteractor) : ViewModel(),
+    NetworkConnectionListener {
 
     val userInputData = MutableLiveData<String>()
+    val networkConnectionData = MutableLiveData<Boolean>()
+    val progressBarData = interactor.getProgressData()
+
+    private var currentAmount: Double = 1.0
+    private var currentRate: String = "USD"
+    private var isNetworkAvailable: Boolean = true
 
     private val initViewSubscription = Subscriptions.from()
     private val backgroundScheduler = Schedulers.io()
     private val mainThreadScheduler = AndroidSchedulers.mainThread()
 
-    private var currentAmount: Double = 1.0
-    private var currentRate: String = "USD"
+    override fun onNetworkChange(isConnected: Boolean) {
+        networkConnectionData.postValue(isConnected)
+        isNetworkAvailable = isConnected.also { sendRequest() }
+    }
 
     fun setRateName(rateName: String) {
         // send request only if user set new rate
         if (currentRate != rateName) {
             currentRate = rateName
             sendRequest()
+        }
+    }
+
+    fun sendRequest() {
+        if (isNetworkAvailable) {
+            interactor.sendRequest(currentAmount, currentRate)
+        } else {
+            Log.e(javaClass.name, "Network connection is lost")
         }
     }
 
@@ -43,22 +60,13 @@ class MainViewModel @Inject constructor(private val interactor: RateDataInteract
     fun setInputAfterTextChangedListener(value: String) {
         Observable.just(value)
             .doOnSubscribe { filterUserInput(value) }
-            .delay(2, TimeUnit.SECONDS)
+            .delay(1, TimeUnit.SECONDS)
             .subscribeOn(backgroundScheduler)
             .observeOn(mainThreadScheduler)
             .subscribe(
                 { setAmount(it.toString()) },
-                {
-                    Log.e(
-                        "Error in ${javaClass.name}",
-                        "setInputAfterTextChangedListener error" + it.localizedMessage
-                    )
-                }
+                { Log.e(javaClass.name, "setInputAfterTextChangedListener error : " + it.localizedMessage) }
             ).addToComposite(initViewSubscription)
-    }
-
-    fun sendRequest() {
-        interactor.sendRequest(currentAmount, currentRate)
     }
 
     private fun filterUserInput(amountInput: String) {

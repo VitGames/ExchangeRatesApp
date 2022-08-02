@@ -1,24 +1,27 @@
 package com.vitgames.softcorptest.view
 
-import android.os.Build
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.ActivityMainBinding
 import com.vitgames.softcorptest.domain.MainViewModel
+import com.vitgames.softcorptest.domain.NetworkConnectionReceiver
 import javax.inject.Inject
 
 
@@ -41,7 +44,35 @@ class MainActivity : AppCompatActivity() {
         initRateSpinner()
         initBottomMenu()
         initAmountEditInput()
+        initNetworkConnectionReceiver()
+        initProgressBar()
         handleDefaultRequest()
+    }
+
+    private fun initProgressBar() {
+        viewModel.progressBarData.observe(this) { inProgress ->
+            val visibility = if (inProgress) {
+                View.VISIBLE
+            } else View.GONE
+            binding.progressBar.visibility = visibility
+        }
+    }
+
+    private fun initNetworkConnectionReceiver() {
+        val intentFilter =
+            IntentFilter().apply { addAction(ConnectivityManager.CONNECTIVITY_ACTION) }
+        registerReceiver(NetworkConnectionReceiver(viewModel), intentFilter)
+
+        viewModel.networkConnectionData.observe(this) { isConnected ->
+            if (!isConnected) {
+                Snackbar.make(
+                    binding.mainContainer,
+                    "Check your network connection",
+                    Snackbar.LENGTH_LONG
+                )
+                    .show();
+            }
+        }
     }
 
     private fun initAmountEditInput() {
@@ -51,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.userInputData.observe(this) { newInput ->
-           binding.amountInput.setText(newInput)
+            binding.amountInput.setText(newInput)
         }
     }
 
