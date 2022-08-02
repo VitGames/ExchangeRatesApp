@@ -55,7 +55,7 @@
         android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_star"
+        android:background="@drawable/ic_star_non_clicked"
         android:layout_marginEnd="20dp"
         android:layout_marginVertical="10dp"
         app:layout_constraintTop_toTopOf="@+id/rate_value"
