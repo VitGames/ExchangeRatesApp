@@ -1,9 +1,9 @@
 package com.vitgames.softcorptest
 
 import android.app.Application
-import com.vitgames.softcorptest.main_activity.DaggerMainAppComponent
-import com.vitgames.softcorptest.main_activity.MainAppComponent
-import com.vitgames.softcorptest.main_activity.MainAppModule
+import com.vitgames.softcorptest.utils.di.DaggerMainAppComponent
+import com.vitgames.softcorptest.utils.di.MainAppComponent
+import com.vitgames.softcorptest.utils.di.MainAppModule
 
 class MainApplication : Application() {
 

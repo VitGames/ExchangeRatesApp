@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.domain
+package com.vitgames.softcorptest.utils
 
 import android.content.BroadcastReceiver
 import android.content.Context

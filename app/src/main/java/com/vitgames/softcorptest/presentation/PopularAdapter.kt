@@ -1,18 +1,19 @@
-package com.vitgames.softcorptest.domain
+package com.vitgames.softcorptest.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.vitgames.softcorptest.data.api.RateData
+import com.vitgames.softcorptest.R
+import com.vitgames.softcorptest.data.api.RatePresentationModel
 import com.vitgames.softcorptest.databinding.RecyclerItemBinding
 import java.util.*
 
+class PopularAdapter(private val clickListener: (RatePresentationModel) -> Unit) : RecyclerView.Adapter<PopularViewHolder>(),
+    ItemTouchHelperAdapter {
 
-class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>(), ItemTouchHelperAdapter {
-
-    private var data = mutableListOf<RateData>()
+    private var data = mutableListOf<RatePresentationModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
         val binding = RecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,14 +22,14 @@ class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>(), ItemTouchHelpe
 
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item)
+        holder.bind(item) { clickListener(item) }
     }
 
     override fun getItemCount(): Int = data.size
 
-    fun setData(newData: List<RateData>) {
+    fun setData(newData: List<RatePresentationModel>) {
         data.clear()
-        data.addAll(newData as MutableList<RateData>)
+        data.addAll(newData as MutableList<RatePresentationModel>)
         notifyDataSetChanged()
     }
 
@@ -49,10 +50,20 @@ class PopularAdapter : RecyclerView.Adapter<PopularViewHolder>(), ItemTouchHelpe
 class PopularViewHolder(private val binding: RecyclerItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: RateData) {
-        binding.icon.setImageResource(item.icon)
-        binding.rateName.text = item.name
-        binding.rateValue.text = item.value
+    fun bind(item: RatePresentationModel, clickListener: (RatePresentationModel) -> Unit) {
+        val starDrawable = if (item.isSavedByUser) {
+            R.drawable.ic_star_clicked
+        } else R.drawable.ic_star_non_clicked
+
+        binding.apply {
+            icon.setImageResource(item.icon)
+            rateName.text = item.name
+            rateValue.text = item.value
+            star.apply {
+                setImageResource(starDrawable)
+                setOnClickListener { clickListener(item) }
+            }
+        }
     }
 }
 

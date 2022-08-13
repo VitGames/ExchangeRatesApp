@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.view
+package com.vitgames.softcorptest.presentation
 
 import android.content.IntentFilter
 import android.net.ConnectivityManager
@@ -9,26 +9,24 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.ActivityMainBinding
-import com.vitgames.softcorptest.domain.MainViewModel
-import com.vitgames.softcorptest.domain.NetworkConnectionReceiver
+import com.vitgames.softcorptest.utils.NetworkConnectionReceiver
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModels<SharedViewModel> { modelFactory }
 
     @Inject
     lateinit var modelFactory: ViewModelProvider.Factory
@@ -39,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         (applicationContext as MainApplication).appComponent.inject(this)
-        viewModel = ViewModelProviders.of(this, modelFactory)[MainViewModel::class.java]
 
         initRateSpinner()
         initBottomMenu()
@@ -59,8 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNetworkConnectionReceiver() {
-        val intentFilter =
-            IntentFilter().apply { addAction(ConnectivityManager.CONNECTIVITY_ACTION) }
+        val intentFilter = IntentFilter().apply { addAction(ConnectivityManager.CONNECTIVITY_ACTION) }
         registerReceiver(NetworkConnectionReceiver(viewModel), intentFilter)
 
         viewModel.networkConnectionData.observe(this) { isConnected ->
@@ -69,8 +65,7 @@ class MainActivity : AppCompatActivity() {
                     binding.mainContainer,
                     "Check your network connection",
                     Snackbar.LENGTH_LONG
-                )
-                    .show();
+                ).show();
             }
         }
     }
@@ -104,22 +99,22 @@ class MainActivity : AppCompatActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.rateSpinner.adapter = adapter
-        }
 
-        binding.rateSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parentView: AdapterView<*>?,
-                    selectedItemView: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val newRate = (selectedItemView as TextView).text.toString()
-                    viewModel.setRateName(newRate)
+            binding.rateSpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parentView: AdapterView<*>?,
+                        selectedItemView: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val newRate = (selectedItemView as TextView).text.toString()
+                        viewModel.setRateName(newRate)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
+        }
     }
 
     private fun initBottomMenu() {

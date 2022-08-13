@@ -5,15 +5,15 @@
     app:startDestination="@id/popularFragment">
     <fragment
         android:id="@+id/popularFragment"
-        android:name="com.vitgames.softcorptest.view.PopularFragment"
+        android:name="com.vitgames.softcorptest.presentation.PopularFragment"
         android:label="PopularFragment" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.vitgames.softcorptest.view.FavoriteFragment"
+        android:name="com.vitgames.softcorptest.presentation.FavoriteFragment"
         android:label="FavoriteFragment" />
     <fragment
         android:id="@+id/sortedFragment"
-        android:name="com.vitgames.softcorptest.view.SortedFragment"
+        android:name="com.vitgames.softcorptest.presentation.SortedFragment"
         android:label="SortedFragment" />
     <action
         android:id="@+id/action_global_sortedFragment"

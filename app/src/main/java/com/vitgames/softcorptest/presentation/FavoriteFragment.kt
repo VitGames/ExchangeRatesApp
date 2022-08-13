@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.view
+package com.vitgames.softcorptest.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.FragmentFavoriteBinding
-import com.vitgames.softcorptest.databinding.FragmentPopularBinding
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
@@ -20,9 +19,5 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     ): View {
         binding = FragmentFavoriteBinding.inflate(inflater)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 }
