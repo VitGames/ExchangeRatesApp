@@ -18,7 +18,6 @@ import javax.inject.Singleton
 interface MainAppComponent{
     fun inject(target: MainActivity)
     fun inject(target: PopularFragment)
-    fun inject(target: SortedFragment)
 }
 
 @Module
@@ -35,11 +34,6 @@ class MainAppModule{
 
 @Module
 abstract class ViewModelModule {
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(SortedViewModel::class)
-    internal abstract fun bindEditPlaceSortedViewModel(viewModel: SortedViewModel): ViewModel
 
     @Binds
     @IntoMap

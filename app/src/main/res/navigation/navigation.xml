@@ -11,12 +11,4 @@
         android:id="@+id/favoriteFragment"
         android:name="com.vitgames.softcorptest.presentation.FavoriteFragment"
         android:label="FavoriteFragment" />
-    <fragment
-        android:id="@+id/sortedFragment"
-        android:name="com.vitgames.softcorptest.presentation.SortedFragment"
-        android:label="SortedFragment" />
-    <action
-        android:id="@+id/action_global_sortedFragment"
-        app:destination="@id/sortedFragment"
-        app:launchSingleTop="false" />
 </navigation>
