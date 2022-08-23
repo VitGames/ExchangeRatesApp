@@ -10,13 +10,15 @@ import com.vitgames.softcorptest.data.api.RatePresentationModel
 import com.vitgames.softcorptest.databinding.RecyclerItemBinding
 import java.util.*
 
-class PopularAdapter(private val clickListener: (RatePresentationModel) -> Unit) : RecyclerView.Adapter<PopularViewHolder>(),
+class PopularAdapter(private val clickListener: (RatePresentationModel) -> Unit) :
+    RecyclerView.Adapter<PopularViewHolder>(),
     ItemTouchHelperAdapter {
 
     private var data = mutableListOf<RatePresentationModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
-        val binding = RecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            RecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PopularViewHolder(binding)
     }
 
@@ -51,9 +53,7 @@ class PopularViewHolder(private val binding: RecyclerItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: RatePresentationModel, clickListener: (RatePresentationModel) -> Unit) {
-        val starDrawable = if (item.isSavedByUser) {
-            R.drawable.ic_star_clicked
-        } else R.drawable.ic_star_non_clicked
+        val starDrawable = getDefaultStarIcon(item)
 
         binding.apply {
             icon.setImageResource(item.icon)
@@ -61,10 +61,37 @@ class PopularViewHolder(private val binding: RecyclerItemBinding) :
             rateValue.text = item.value
             star.apply {
                 setImageResource(starDrawable)
-                setOnClickListener { clickListener(item) }
+                setOnClickListener {
+                    clickListener(item)
+                    animate().apply {
+                        scaleXBy(-.5f)
+                        scaleYBy(-.5f)
+                    }.withEndAction {
+                        star.animate().apply {
+                            scaleXBy(.5f)
+                            scaleYBy(.5f)
+                        }
+                        star.setImageResource(
+                            getStarIconAfterClick(item)
+                        )
+                    }
+
+                }
             }
         }
     }
+
+    private fun getDefaultStarIcon(item: RatePresentationModel) =
+        if (item.isFavorite) {
+            R.drawable.ic_star_clicked
+        } else R.drawable.ic_star_non_clicked
+
+    private fun getStarIconAfterClick(item: RatePresentationModel) =
+        if (item.isFavorite) {
+            R.drawable.ic_star_non_clicked
+        } else {
+            R.drawable.ic_star_clicked
+        }
 }
 
 interface ItemTouchHelperAdapter {

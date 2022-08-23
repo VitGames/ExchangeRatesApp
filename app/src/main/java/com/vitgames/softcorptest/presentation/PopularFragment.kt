@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.vitgames.softcorptest.MainApplication
@@ -48,5 +46,15 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
         viewModel.currentData.observe(viewLifecycleOwner) { newData ->
             adapter.setData(newData)
         }
+    }
+
+    override fun onResume() {
+        val adapter = (recycler?.adapter as PopularAdapter)
+        viewModel.getCachedRateData().also {
+            if (it.isNotEmpty()) {
+                adapter.setData(it)
+            }
+        }
+        super.onResume()
     }
 }

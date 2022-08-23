@@ -3,18 +3,24 @@ package com.vitgames.softcorptest.presentation
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vitgames.softcorptest.data.api.ApiManager
 import com.vitgames.softcorptest.data.api.RateModel
 import com.vitgames.softcorptest.data.api.RatePresentationModel
+import com.vitgames.softcorptest.data.data_base.RateEntity
+import com.vitgames.softcorptest.domain.LocalRateStorage
 import com.vitgames.softcorptest.getRatePresentationModels
 import com.vitgames.softcorptest.utils.NetworkConnectionListener
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class SharedViewModel @Inject constructor(private val api: ApiManager.ApiInterface) : ViewModel(),
-    NetworkConnectionListener {
+class SharedViewModel @Inject constructor(
+    private val api: ApiManager.ApiInterface,
+    private val storage: LocalRateStorage
+) : ViewModel(), NetworkConnectionListener {
 
     val userInputData = MutableLiveData<String>()
     val networkConnectionData = MutableLiveData<Boolean>()
@@ -24,6 +30,12 @@ class SharedViewModel @Inject constructor(private val api: ApiManager.ApiInterfa
     private var currentAmount: Double = 1.0
     private var currentRate: String = "USD"
     private var isNetworkAvailable: Boolean = true
+    private var cachedRateData = emptyList<RatePresentationModel>()
+
+    private val dataBaseErrorHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.e(javaClass.name, throwable.message ?: "Error during work with database")
+    }
+    private val coroutineContext = CoroutineScope(Dispatchers.IO + dataBaseErrorHandler).coroutineContext
 
     override fun onNetworkChange(isConnected: Boolean) {
         networkConnectionData.postValue(isConnected)
@@ -41,14 +53,37 @@ class SharedViewModel @Inject constructor(private val api: ApiManager.ApiInterfa
     fun sendRequest() {
         if (isNetworkAvailable) {
             progressBarData.postValue(true)
-            handleRequest(currentAmount, currentRate)
+            viewModelScope.launch(coroutineContext) {
+                handleRequest(currentAmount, currentRate, storage.getAll())
+            }
         } else {
             Log.e(javaClass.name, "Network connection is lost")
         }
     }
 
     fun onStarIconClick(item: RatePresentationModel) {
-        //TODO
+        if (item.isFavorite) {
+            viewModelScope.launch(coroutineContext) {
+                storage.delete(RateEntity(item.id))
+            }
+        } else {
+            viewModelScope.launch(coroutineContext) {
+                storage.insert(RateEntity(item.id))
+            }
+        }
+        fetchData(item)
+    }
+
+    private fun fetchData(item: RatePresentationModel) {
+        cachedRateData.map {
+            if (it.id == item.id) {
+                it.isFavorite = !it.isFavorite
+            }
+        }
+        viewModelScope.launch {
+            delay(660)
+            currentData.postValue(cachedRateData)
+        }
     }
 
     fun setInputAfterTextChangedListener(value: String) {
@@ -58,19 +93,20 @@ class SharedViewModel @Inject constructor(private val api: ApiManager.ApiInterfa
         }
     }
 
-    private fun handleRequest(amount: Double, rateName: String) {
+    fun getCachedRateData(): List<RatePresentationModel> = cachedRateData
+
+    private fun handleRequest(amount: Double, rateName: String, favoriteList: List<RateEntity>) {
         val call: Call<RateModel> = api.getRates(rateName)
 
         call.enqueue(object : Callback<RateModel?> {
             override fun onResponse(call: Call<RateModel?>, response: Response<RateModel?>) {
-                currentData.postValue(
-                    getFormattedRateList(
-                        response.body()?.rates?.getRatePresentationModels(),
-                        amount,
-                        rateName
-
-                    )
+                val newData = getFormattedRateList(
+                    response.body()?.rates?.getRatePresentationModels(favoriteList),
+                    amount,
+                    rateName
                 )
+                cachedRateData = newData.also { currentData.postValue(it) }
+
                 progressBarData.postValue(false)
             }
 
@@ -85,7 +121,9 @@ class SharedViewModel @Inject constructor(private val api: ApiManager.ApiInterfa
     private fun setAmount(amount: String) {
         // send request only if user set new amount
         val convertedAmount = amount.toDouble()
-        if (currentAmount != convertedAmount && amount.isNotEmpty() && amount.first().toString() != ".") {
+        if (currentAmount != convertedAmount && amount.isNotEmpty() && amount.first()
+                .toString() != "."
+        ) {
             currentAmount = convertedAmount
             sendRequest()
         }

@@ -31,9 +31,9 @@ data class Rate(
 )
 
 data class RatePresentationModel(
-    val id: Int,
+    val id: Long,
     val icon: Int,
     val name: String,
     var value: String,
-    val isSavedByUser: Boolean = false
+    var isFavorite: Boolean = false
 )
