@@ -9,8 +9,9 @@ import com.vitgames.softcorptest.data.data_base.LocalRateStorageImpl
 import com.vitgames.softcorptest.data.data_base.RateMainDataBase
 import com.vitgames.softcorptest.domain.LocalRateStorage
 import com.vitgames.softcorptest.presentation.MainActivity
-import com.vitgames.softcorptest.presentation.PopularFragment
-import com.vitgames.softcorptest.presentation.SharedViewModel
+import com.vitgames.softcorptest.presentation.MainViewModel
+import com.vitgames.softcorptest.presentation.favorite_screen.FavoriteFragment
+import com.vitgames.softcorptest.presentation.popular_screen.PopularFragment
 import dagger.Binds
 import dagger.Component
 import dagger.Module
@@ -23,6 +24,7 @@ import javax.inject.Singleton
 interface MainAppComponent {
     fun inject(target: MainActivity)
     fun inject(target: PopularFragment)
+    fun inject(target: FavoriteFragment)
 }
 
 @Module
@@ -47,8 +49,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SharedViewModel::class)
-    internal abstract fun bindEditPlaceSharedViewModel(viewModel: SharedViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindEditPlaceSharedViewModel(viewModel: MainViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

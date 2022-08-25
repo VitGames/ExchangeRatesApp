@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.presentation
+package com.vitgames.softcorptest.presentation.popular_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.FragmentPopularBinding
+import com.vitgames.softcorptest.presentation.MainViewModel
+import com.vitgames.softcorptest.utils.SimpleItemTouchHelperCallback
 import javax.inject.Inject
 
 
 class PopularFragment : Fragment(R.layout.fragment_popular) {
 
     private lateinit var binding: FragmentPopularBinding
-    private val viewModel by activityViewModels<SharedViewModel> { modelFactory }
+    private val viewModel by activityViewModels<MainViewModel> { modelFactory }
     private var recycler: RecyclerView? = null
 
     @Inject
@@ -35,17 +37,17 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         recycler = binding.recyclerPopular
         recycler?.adapter = PopularAdapter { item -> viewModel.onStarIconClick(item) }
         val adapter = (recycler?.adapter as PopularAdapter)
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recycler)
 
         viewModel.currentData.observe(viewLifecycleOwner) { newData ->
             adapter.setData(newData)
         }
+
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recycler)
     }
 
     override fun onResume() {

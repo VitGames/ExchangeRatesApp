@@ -1,5 +1,6 @@
-package com.vitgames.softcorptest
+package com.vitgames.softcorptest.utils
 
+import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.data.api.Rate
 import com.vitgames.softcorptest.data.api.RatePresentationModel
 import com.vitgames.softcorptest.data.data_base.RateEntity

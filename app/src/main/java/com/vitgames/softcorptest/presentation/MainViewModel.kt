@@ -9,7 +9,7 @@ import com.vitgames.softcorptest.data.api.RateModel
 import com.vitgames.softcorptest.data.api.RatePresentationModel
 import com.vitgames.softcorptest.data.data_base.RateEntity
 import com.vitgames.softcorptest.domain.LocalRateStorage
-import com.vitgames.softcorptest.getRatePresentationModels
+import com.vitgames.softcorptest.utils.getRatePresentationModels
 import com.vitgames.softcorptest.utils.NetworkConnectionListener
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -17,7 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class SharedViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val api: ApiManager.ApiInterface,
     private val storage: LocalRateStorage
 ) : ViewModel(), NetworkConnectionListener {
@@ -26,6 +26,7 @@ class SharedViewModel @Inject constructor(
     val networkConnectionData = MutableLiveData<Boolean>()
     val progressBarData = MutableLiveData<Boolean>()
     val currentData = MutableLiveData<List<RatePresentationModel>>()
+    val favoriteData = MutableLiveData<List<RatePresentationModel>>()
 
     private var currentAmount: Double = 1.0
     private var currentRate: String = "USD"
@@ -83,6 +84,7 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             delay(660)
             currentData.postValue(cachedRateData)
+            favoriteData.postValue(cachedRateData.filter { it.isFavorite })
         }
     }
 
@@ -95,6 +97,8 @@ class SharedViewModel @Inject constructor(
 
     fun getCachedRateData(): List<RatePresentationModel> = cachedRateData
 
+    fun getFavoriteRateData(): List<RatePresentationModel> = cachedRateData.filter { it.isFavorite }
+
     private fun handleRequest(amount: Double, rateName: String, favoriteList: List<RateEntity>) {
         val call: Call<RateModel> = api.getRates(rateName)
 
@@ -105,7 +109,10 @@ class SharedViewModel @Inject constructor(
                     amount,
                     rateName
                 )
-                cachedRateData = newData.also { currentData.postValue(it) }
+                cachedRateData = newData.also {
+                    currentData.postValue(it)
+                    favoriteData.postValue(it.filter { it.isFavorite })
+                }
 
                 progressBarData.postValue(false)
             }

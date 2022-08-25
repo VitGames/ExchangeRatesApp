@@ -5,10 +5,10 @@
     app:startDestination="@id/popularFragment">
     <fragment
         android:id="@+id/popularFragment"
-        android:name="com.vitgames.softcorptest.presentation.PopularFragment"
+        android:name="com.vitgames.softcorptest.presentation.popular_screen.PopularFragment"
         android:label="PopularFragment" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.vitgames.softcorptest.presentation.FavoriteFragment"
+        android:name="com.vitgames.softcorptest.presentation.favorite_screen.FavoriteFragment"
         android:label="FavoriteFragment" />
 </navigation>

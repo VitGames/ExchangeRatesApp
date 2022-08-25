@@ -26,7 +26,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by viewModels<SharedViewModel> { modelFactory }
+    private val viewModel by viewModels<MainViewModel> { modelFactory }
 
     @Inject
     lateinit var modelFactory: ViewModelProvider.Factory
