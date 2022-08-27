@@ -46,6 +46,8 @@ class PopularAdapter(private val clickListener: (RatePresentationModel) -> Unit)
         }
         notifyItemMoved(fromPosition, toPosition)
     }
+
+    override fun onItemDismiss(position: Int) {}
 }
 
 class PopularViewHolder(private val binding: RecyclerItemBinding) :

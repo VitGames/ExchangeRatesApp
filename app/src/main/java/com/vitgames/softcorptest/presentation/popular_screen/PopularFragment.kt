@@ -45,7 +45,7 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
             adapter.setData(newData)
         }
 
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter, false)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recycler)
     }

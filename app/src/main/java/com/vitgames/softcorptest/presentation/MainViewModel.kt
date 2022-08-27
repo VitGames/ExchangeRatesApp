@@ -75,6 +75,15 @@ class MainViewModel @Inject constructor(
         fetchData(item)
     }
 
+    fun onItemRemoved(item: RatePresentationModel) {
+        if (item.isFavorite) {
+            viewModelScope.launch(coroutineContext) {
+                storage.delete(RateEntity(item.id))
+            }
+        }
+        fetchData(item)
+    }
+
     private fun fetchData(item: RatePresentationModel) {
         cachedRateData.map {
             if (it.id == item.id) {

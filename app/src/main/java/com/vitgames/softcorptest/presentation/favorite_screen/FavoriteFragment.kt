@@ -39,7 +39,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         super.onViewCreated(view, savedInstanceState)
 
         recycler = binding.recyclerFavorite
-        recycler?.adapter = FavoriteAdapter { item -> viewModel.onStarIconClick(item) }
+        recycler?.adapter = FavoriteAdapter (
+            { item -> viewModel.onStarIconClick(item) },
+            { item -> viewModel.onItemRemoved(item) })
 
         val adapter = (recycler?.adapter as FavoriteAdapter)
         adapter.setData(viewModel.getFavoriteRateData())
@@ -48,7 +50,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             adapter.setData(newData)
         }
 
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter, true)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recycler)
     }

@@ -9,7 +9,10 @@ import com.vitgames.softcorptest.databinding.RecyclerItemBinding
 import com.vitgames.softcorptest.utils.ItemTouchHelperAdapter
 import java.util.*
 
-class FavoriteAdapter(private val clickListener: (RatePresentationModel) -> Unit) :
+class FavoriteAdapter(
+    private val clickListener: (RatePresentationModel) -> Unit,
+    private val itemRemovedListener: (RatePresentationModel) -> Unit
+) :
     RecyclerView.Adapter<FavoriteViewHolder>(),
     ItemTouchHelperAdapter {
 
@@ -44,6 +47,12 @@ class FavoriteAdapter(private val clickListener: (RatePresentationModel) -> Unit
             }
         }
         notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onItemDismiss(position: Int) {
+        itemRemovedListener(data[position])
+        data.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
 
