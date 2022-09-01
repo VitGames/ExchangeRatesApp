@@ -8,8 +8,8 @@ import com.vitgames.softcorptest.data.api.ApiManager
 import com.vitgames.softcorptest.data.data_base.LocalRateStorageImpl
 import com.vitgames.softcorptest.data.data_base.RateMainDataBase
 import com.vitgames.softcorptest.domain.LocalRateStorage
-import com.vitgames.softcorptest.presentation.MainActivity
-import com.vitgames.softcorptest.presentation.MainViewModel
+import com.vitgames.softcorptest.presentation.main_screen.MainActivity
+import com.vitgames.softcorptest.presentation.main_screen.MainViewModel
 import com.vitgames.softcorptest.presentation.favorite_screen.FavoriteFragment
 import com.vitgames.softcorptest.presentation.popular_screen.PopularFragment
 import dagger.Binds

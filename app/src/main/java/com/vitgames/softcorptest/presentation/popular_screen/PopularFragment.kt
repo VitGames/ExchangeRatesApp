@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vitgames.softcorptest.MainApplication
 import com.vitgames.softcorptest.R
 import com.vitgames.softcorptest.databinding.FragmentPopularBinding
-import com.vitgames.softcorptest.presentation.MainViewModel
+import com.vitgames.softcorptest.presentation.main_screen.MainViewModel
 import com.vitgames.softcorptest.utils.SimpleItemTouchHelperCallback
 import javax.inject.Inject
 

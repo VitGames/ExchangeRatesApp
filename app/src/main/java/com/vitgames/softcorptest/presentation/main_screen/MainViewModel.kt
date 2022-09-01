@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.presentation
+package com.vitgames.softcorptest.presentation.main_screen
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -35,6 +35,7 @@ class MainViewModel @Inject constructor(
 
     private val dataBaseErrorHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e(javaClass.name, throwable.message ?: "Error during work with database")
+        progressBarData.postValue(false)
     }
     private val coroutineContext = CoroutineScope(Dispatchers.IO + dataBaseErrorHandler).coroutineContext
 

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    tools:context=".presentation.main_screen.MainActivity">
 
     <EditText
         android:id="@+id/amount_input"
@@ -16,7 +16,7 @@
         android:layout_marginHorizontal="20dp"
         android:maxLength="11"
         android:textSize="25sp"
-        android:text="1"
+        android:text="@string/default_rate"
         android:inputType="numberDecimal"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent"

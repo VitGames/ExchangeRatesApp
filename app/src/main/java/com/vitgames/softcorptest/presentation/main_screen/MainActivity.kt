@@ -1,4 +1,4 @@
-package com.vitgames.softcorptest.presentation
+package com.vitgames.softcorptest.presentation.main_screen
 
 import android.content.IntentFilter
 import android.net.ConnectivityManager

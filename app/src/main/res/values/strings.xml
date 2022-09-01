@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Exchange Rates</string>
+
+    <string name="default_rate">1</string>
 </resources>
