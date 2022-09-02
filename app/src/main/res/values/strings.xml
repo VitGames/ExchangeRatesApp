@@ -2,4 +2,7 @@
     <string name="app_name">Exchange Rates</string>
 
     <string name="default_rate">1</string>
+
+    <string name="settings_toolbar_title">Settings</string>
+    <string name="setting_1">Notify me about my favorite exchange rates</string>
 </resources>

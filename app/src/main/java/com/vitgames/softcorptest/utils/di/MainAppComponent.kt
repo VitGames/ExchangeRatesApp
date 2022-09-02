@@ -12,6 +12,8 @@ import com.vitgames.softcorptest.presentation.main_screen.MainActivity
 import com.vitgames.softcorptest.presentation.main_screen.MainViewModel
 import com.vitgames.softcorptest.presentation.favorite_screen.FavoriteFragment
 import com.vitgames.softcorptest.presentation.popular_screen.PopularFragment
+import com.vitgames.softcorptest.presentation.settings_screen.SettingsActivity
+import com.vitgames.softcorptest.presentation.settings_screen.SettingsViewModel
 import dagger.Binds
 import dagger.Component
 import dagger.Module
@@ -23,6 +25,7 @@ import javax.inject.Singleton
 @Component(modules = [MainAppModule::class, ViewModelModule::class])
 interface MainAppComponent {
     fun inject(target: MainActivity)
+    fun inject(target: SettingsActivity)
     fun inject(target: PopularFragment)
     fun inject(target: FavoriteFragment)
 }
@@ -50,7 +53,12 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel::class)
-    internal abstract fun bindEditPlaceSharedViewModel(viewModel: MainViewModel): ViewModel
+    internal abstract fun bindSharedViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    internal abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

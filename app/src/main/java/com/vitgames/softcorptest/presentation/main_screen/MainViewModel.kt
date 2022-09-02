@@ -1,6 +1,9 @@
 package com.vitgames.softcorptest.presentation.main_screen
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +12,7 @@ import com.vitgames.softcorptest.data.api.RateModel
 import com.vitgames.softcorptest.data.api.RatePresentationModel
 import com.vitgames.softcorptest.data.data_base.RateEntity
 import com.vitgames.softcorptest.domain.LocalRateStorage
+import com.vitgames.softcorptest.presentation.settings_screen.SettingsActivity
 import com.vitgames.softcorptest.utils.getRatePresentationModels
 import com.vitgames.softcorptest.utils.NetworkConnectionListener
 import kotlinx.coroutines.*
@@ -108,6 +112,11 @@ class MainViewModel @Inject constructor(
     fun getCachedRateData(): List<RatePresentationModel> = cachedRateData
 
     fun getFavoriteRateData(): List<RatePresentationModel> = cachedRateData.filter { it.isFavorite }
+
+    fun startSettingsActivity(context: Context) {
+        val intent = Intent(context, SettingsActivity::class.java)
+        startActivity(context, intent, null)
+    }
 
     private fun handleRequest(amount: Double, rateName: String, favoriteList: List<RateEntity>) {
         val call: Call<RateModel> = api.getRates(rateName)

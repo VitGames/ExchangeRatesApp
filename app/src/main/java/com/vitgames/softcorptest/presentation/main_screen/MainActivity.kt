@@ -43,7 +43,14 @@ class MainActivity : AppCompatActivity() {
         initAmountEditInput()
         initNetworkConnectionReceiver()
         initProgressBar()
+        initSettingsButton()
         handleDefaultRequest()
+    }
+
+    private fun initSettingsButton() {
+        binding.settings.setOnClickListener {
+            viewModel.startSettingsActivity(this)
+        }
     }
 
     private fun initProgressBar() {
